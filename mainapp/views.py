@@ -1,6 +1,7 @@
+from datetime import datetime
+
 from django.http import HttpResponse
 from django.views.generic import TemplateView
-from datetime import datetime
 
 
 # class HelloWorldView(View):
@@ -44,17 +45,22 @@ class ContactsView(TemplateView):
         ]
         return context_data
 
+
 class CoursesListView(TemplateView):
     template_name = 'mainapp/courses_list.html'
+
 
 class DocSiteView(TemplateView):
     template_name = 'mainapp/doc_site.html'
 
+
 class IndexView(TemplateView):
     template_name = 'mainapp/index.html'
 
+
 class LoginView(TemplateView):
     template_name = 'mainapp/login.html'
+
 
 class NewsView(TemplateView):
     template_name = 'mainapp/news.html'
@@ -98,5 +104,6 @@ class NewsView(TemplateView):
 
         ]
 
+        context_data['range'] = range(1, 6)
 
         return context_data
