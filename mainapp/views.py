@@ -1,6 +1,7 @@
+import json
 from datetime import datetime
-
-from django.http import HttpResponse
+from django.conf import settings
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import TemplateView
 
 
@@ -67,43 +68,16 @@ class NewsView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        # context_data['title'] = 'Новость раз'
-        # context_data['preview'] = 'Превью к новости раз'
-        # context_data['date'] = '2022-01-01'
-        context_data['object_list'] = [
-            {
-                'title': 'Новость раз',
-                'preview': 'Превью к новости раз',
-                'date': datetime.now()
-            },
-            {
-                'title': 'Новость два',
-                'preview': 'Превью к новости два',
-                'date': datetime.now()
-            },
-            {
-                'title': 'Новость три',
-                'preview': 'Превью к новости три',
-                'date': datetime.now()
-            },
-            {
-                'title': 'Новость четыре',
-                'preview': 'Превью к новости четыре',
-                'date': datetime.now()
-            },
-            {
-                'title': 'Новость пять',
-                'preview': 'Превью к новости пять',
-                'date': datetime.now()
-            },
-            {
-                'title': 'Новость шесть',
-                'preview': 'Превью к новости шесть',
-                'date': datetime.now()
-            },
-
-        ]
+        with open(settings.BASE_DIR / 'news.json', encoding="utf-8") as news_file:
+            context_data['object_list'] = json.load(news_file)
 
         context_data['range'] = range(1, 6)
 
         return context_data
+
+    def get(self, *args, **kwargs):
+        query = self.request.GET.get('q', None)
+        if query:
+            return HttpResponseRedirect(f'https://google.ru/search?q={query}')
+
+        return super().get(*args, **kwargs)
