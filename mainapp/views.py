@@ -3,6 +3,7 @@ from datetime import datetime
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import TemplateView
+from mainapp.models import News
 
 
 # class HelloWorldView(View):
@@ -15,6 +16,7 @@ from django.views.generic import TemplateView
 #
 # def blog(request, **kwargs):
 #     return HttpResponse(f'{kwargs}')
+
 
 class ContactsView(TemplateView):
     template_name = 'mainapp/contacts.html'
@@ -68,8 +70,10 @@ class NewsView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        with open(settings.BASE_DIR / 'news.json', encoding="utf-8") as news_file:
-            context_data['object_list'] = json.load(news_file)
+        # with open(settings.BASE_DIR / 'news.json', encoding="utf-8") as news_file:
+        #     context_data['object_list'] = json.load(news_file)
+
+        context_data['object_list'] = News.object.all()
 
         context_data['range'] = range(1, 6)
 
